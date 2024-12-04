@@ -9,6 +9,7 @@ interface CsvUploadProps {
 }
 
 interface CsvUploadType {
+  emp_id: string;
   name: string;
 }
 
@@ -21,13 +22,18 @@ const CsvUpload: React.FC<CsvUploadProps> = ({ onUploadComplete }) => {
         skipEmptyLines: true,
         complete: async (result) => {
           if (result) {
-            const names = result.data.map((row) => row.name);
+            const participants = result.data.map((row) => ({
+              emp_id: row.emp_id.trim(),
+              name: row.name.trim(),
+            }));
+
+            console.log(result);
 
             try {
               const response = await fetch("/api/participants", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ participants: names }),
+                body: JSON.stringify({ participants }),
               });
 
               if (response.ok) {
@@ -47,7 +53,7 @@ const CsvUpload: React.FC<CsvUploadProps> = ({ onUploadComplete }) => {
       });
   };
   return (
-    <div className="flex flex-col items-start justify-center gap-3">
+    <div className="flex flex-col sm:flex-row items-center sm:items-start justify-center gap-3">
       <Label htmlFor="upload" className="text-slate-800 font-bold">
         Upload Participants (.csv)
       </Label>

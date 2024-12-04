@@ -16,20 +16,20 @@ const WinnerDisplay: React.FC<WinnerDisplayProps> = ({
 }) => {
   return (
     <div className="flex flex-col items-center justify-center gap-5">
-      <h3 className="text-center font-bold text-4xl">Winner:</h3>
-      <div className="text-7xl font-bold">
+      <h3 className="text-center font-bold text-3xl">Winner:</h3>
+      <div className="text-6xl sm:text-7xl  font-bold">
         {winner ? <p>{winner}</p> : <p>No winner yet.</p>}
       </div>
-      <div className="grid grid-cols-2 gap-5 mt-5">
+      <div className="flex flex-col sm:flex-row gap-5 mt-5 w-full sm:w-auto">
         <Button
-          className="w-full min-w-64 bg-orange-400"
+          className="w-full bg-orange-400 min-w-40"
           onClick={startDrawing}
           disabled={isDrawing}
         >
           Start Draw
         </Button>
         <Button
-          className="w-full min-w-64 bg-blue-950"
+          className="w-full bg-blue-950 min-w-40"
           onClick={stopDrawing}
           disabled={!isDrawing}
         >

@@ -5,12 +5,23 @@
 import CsvUpload from "@/components/CsvUpload";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 type Participant = {
   name: string;
   _id: string;
+  emp_id: string;
 };
 
 const ParticipantsPage: React.FC = () => {
@@ -80,49 +91,80 @@ const ParticipantsPage: React.FC = () => {
     fetchParticipants();
   }, []);
 
-  if (loading)
-    return (
-      <p className="text-center mt-10 text-2xl">Loading participants...</p>
-    );
   if (error)
     return <p className="text-center mt-10 text-2xl">Error: {error}</p>;
 
   return (
-    <div className="flex flex-row items-center justify-center text-start mt-10">
-      <Card className="p-5">
-        <CardHeader>
-          <CardTitle>
-            <div className="grid grid-rows-2 items-center justify-start gap-5">
-              <div>
-                <CsvUpload onUploadComplete={handleUploadComplete} />
-                {statusMessage && <p>{statusMessage}</p>}
-              </div>
-              <div className="flex flex-rows items-center justify-center gap-5">
-                <Button
-                  onClick={handleDeleteAll}
-                  className="hover:bg-orange-600"
-                >
-                  {deleting
-                    ? "Deleting Participants..."
-                    : "Delete All Participants"}
-                </Button>
-                <Link className="underline hover:text-orange-500" href={"/"}>
-                  Go back to Home Page
-                </Link>
-              </div>
-            </div>
+    <div className="grid grid-cols-1 m-10 items-center justify-center">
+      <Card>
+        <CardHeader className="bg-sky-500 rounded-t-lg">
+          <CardTitle className="text-center text-2xl sm:text-3xl text-white">
+            {process.env.NEXT_PUBLIC_RAFFLE_TITLE}
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <h1 className="font-bold text-2xl mb-5">List of Participants</h1>
-          {participants.length > 0 ? (
-            <ul className="grid grid-cols-4">
-              {participants.map((participant) => (
-                <li key={participant._id}>{participant.name}</li>
-              ))}
-            </ul>
+        <CardContent className="text-center mt-5">
+          {loading ? (
+            <p className="text-3xl">Loading participants...</p>
           ) : (
-            <p>No participants found.</p>
+            <div>
+              <div className="flex flex-row items-center justify-center mt-10">
+                <Card className="flex flex-col gap-5 items-center justify-center p-10 sm:w-[60%]">
+                  <div className="flex flex-col sm:flex-row gap-5 w-full items-center justify-center">
+                    <Button className="w-full sm:w-auto sm:min-w-56">
+                      <Link className="w-full" href={"/"}>
+                        Go back to home page
+                      </Link>
+                    </Button>
+
+                    <Button
+                      className="w-full sm:w-auto sm:min-w-56"
+                      onClick={handleDeleteAll}
+                    >
+                      {deleting
+                        ? "Deleting participants..."
+                        : "Delete All Participants"}
+                    </Button>
+                  </div>
+                  <CsvUpload onUploadComplete={handleUploadComplete} />
+                </Card>
+              </div>
+              <div className="mt-10 flex flex-row items-center justify-center">
+                <Card className="p-10 sm:w-[60%]">
+                  <CardContent>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="text-center">
+                            Unique ID
+                          </TableHead>
+                          <TableHead className="text-center">
+                            Employee ID
+                          </TableHead>
+                          <TableHead className="text-center">
+                            Full Name
+                          </TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {participants.map((participant) => (
+                          <TableRow key={participant._id}>
+                            <TableCell className="font-medium">
+                              {participant._id}
+                            </TableCell>
+                            <TableCell className="font-medium">
+                              {participant.emp_id}
+                            </TableCell>
+                            <TableCell className="font-medium">
+                              {participant.name}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
           )}
         </CardContent>
       </Card>

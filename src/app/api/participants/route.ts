@@ -20,8 +20,9 @@ export async function POST(req: Request) {
     const collection = db.collection("participants");
 
     // Format participants for insertion
-    const formattedParticipants = participants.map((name: string) => ({
+    const formattedParticipants = participants.map(({ emp_id, name }) => ({
       name,
+      emp_id,
     }));
 
     try {
