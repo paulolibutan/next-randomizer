@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import WinnerDisplay from "@/components/WinnerDisplay";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Loading from "@/components/Loading";
 
 type Participant = {
   _id: string; // MongoDB ObjectId
@@ -137,7 +138,7 @@ const Home: React.FC = () => {
         </CardHeader>
         <CardContent className="text-center mt-5">
           {loading ? (
-            <p className="text-3xl">Loading participants...</p>
+            <Loading />
           ) : (
             <div>
               <WinnerDisplay

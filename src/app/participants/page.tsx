@@ -3,6 +3,7 @@
 "use client";
 
 import CsvUpload from "@/components/CsvUpload";
+import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -102,7 +103,7 @@ const ParticipantsPage: React.FC = () => {
         </CardHeader>
         <CardContent className="text-center mt-5">
           {loading ? (
-            <p className="text-3xl">Loading participants...</p>
+            <Loading />
           ) : (
             <div>
               <div className="flex flex-row items-center justify-center mt-10">
