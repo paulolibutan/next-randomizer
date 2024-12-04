@@ -3,6 +3,7 @@ import React from "react";
 import Papa from "papaparse";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
+import { Bounce, toast } from "react-toastify";
 
 interface CsvUploadProps {
   onUploadComplete: (response: any) => void;
@@ -39,14 +40,44 @@ const CsvUpload: React.FC<CsvUploadProps> = ({ onUploadComplete }) => {
               if (response.ok) {
                 const result = await response.json();
                 onUploadComplete(result);
-                alert("Participants uploaded successfully!");
+                toast.success("Participants uploaded successfully!", {
+                  position: "top-right",
+                  autoClose: 3000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  transition: Bounce,
+                });
               } else {
                 const errorData = await response.json();
-                alert(`Error: ${errorData.message}`);
+                toast.error(`Error: ${errorData.message}`, {
+                  position: "top-right",
+                  autoClose: 3000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  transition: Bounce,
+                });
               }
             } catch (error) {
               console.error("Error uploading participants:", error);
-              alert("An error occurred while uploading participants.");
+              toast.error("An error occurred while uploading participants.", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+              });
             }
           }
         },

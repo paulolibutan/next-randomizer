@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { Bounce, toast } from "react-toastify";
 
 type Participant = {
   name: string;
@@ -61,11 +62,31 @@ const ParticipantsPage: React.FC = () => {
       }
 
       const data = await response.json();
-      alert(`Deleted ${data.deletedCount} participants.`);
+      toast.success(`Deleted ${data.deletedCount} participants.`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
       fetchParticipants();
     } catch (error: any) {
       console.error("Error deleting participants:", error);
-      alert("An error occurred while deleting participants.");
+      toast.error("An error occurred while deleting participants.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     } finally {
       setDeleting(false);
     }

@@ -7,6 +7,7 @@ import WinnerDisplay from "@/components/WinnerDisplay";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Loading from "@/components/Loading";
+import { Bounce, toast } from "react-toastify";
 
 type Participant = {
   _id: string; // MongoDB ObjectId
@@ -28,7 +29,17 @@ const Home: React.FC = () => {
 
   const startDrawing = () => {
     if (participants.length === 0) {
-      alert("No participants available for the draw.");
+      toast.warn("No participants available for the draw.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
       return;
     }
 
@@ -70,13 +81,33 @@ const Home: React.FC = () => {
         );
 
         setWinners((prevWinners) => [...prevWinners, currentWinner]);
-        alert(`🎉 Winner: ${currentWinner.name} has been saved!`);
+        toast.success(`🎉 Winner: ${currentWinner.name} has been saved!`, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
 
         // Clear the current winner
         setCurrentWinner(null);
       } catch (error: any) {
         console.error("Error saving winner:", error);
-        alert("An error occurred while saving the winner.");
+        toast.error("An error occurred while saving the winner.", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
       }
     }
   };
@@ -93,10 +124,30 @@ const Home: React.FC = () => {
 
       // Clear the winners list locally
       setWinners([]);
-      alert("All winners have been deleted.");
+      toast.success("All winners have been deleted.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     } catch (error: any) {
       console.error("Error deleting all winners:", error);
-      alert("An error occurred while deleting all winners.");
+      toast.error("An error occurred while deleting all winners.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     }
   };
 
