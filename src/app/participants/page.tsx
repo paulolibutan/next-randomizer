@@ -8,9 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -126,6 +124,7 @@ const ParticipantsPage: React.FC = () => {
                     </Button>
                   </div>
                   <CsvUpload onUploadComplete={handleUploadComplete} />
+                  {statusMessage && <p>{statusMessage}</p>}
                 </Card>
               </div>
               <div className="mt-10 flex flex-row items-center justify-center">

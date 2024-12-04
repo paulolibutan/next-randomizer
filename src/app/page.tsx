@@ -16,7 +16,6 @@ type Participant = {
 const Home: React.FC = () => {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [winner, setWinner] = useState<string | null>(null);
-  const [winnerId, setWinnerId] = useState<string | null>(null);
   const [winners, setWinners] = useState<Participant[]>([]);
   const [currentWinner, setCurrentWinner] = useState<Participant | null>(null);
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
@@ -37,7 +36,6 @@ const Home: React.FC = () => {
       drawInterval.current = window.setInterval(() => {
         const randomIndex = Math.floor(Math.random() * participants.length);
         setWinner(participants[randomIndex].name);
-        setWinnerId(participants[randomIndex].emp_id);
         setCurrentWinner(participants[randomIndex]);
       }, 100);
     }

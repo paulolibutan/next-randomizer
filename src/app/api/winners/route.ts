@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
-const { ObjectId } = require("mongodb");
+import { ObjectId } from "mongodb";
 
 export async function POST(req: Request) {
   try {
