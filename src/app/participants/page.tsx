@@ -39,7 +39,7 @@ const ParticipantsPage: React.FC = () => {
           response.result?.insertedCount || 0
         } participants added.`
       );
-      window.location.reload();
+      fetchParticipants();
     }
   };
 
@@ -62,7 +62,7 @@ const ParticipantsPage: React.FC = () => {
 
       const data = await response.json();
       alert(`Deleted ${data.deletedCount} participants.`);
-      window.location.reload();
+      fetchParticipants();
     } catch (error: any) {
       console.error("Error deleting participants:", error);
       alert("An error occurred while deleting participants.");
@@ -72,23 +72,23 @@ const ParticipantsPage: React.FC = () => {
   };
 
   useEffect(() => {
-    const fetchParticipants = async () => {
-      try {
-        const response = await fetch("/api/participants");
-        if (!response.ok) {
-          throw new Error("Failed to fetch participants");
-        }
-        const data = await response.json();
-        setParticipants(data.participants);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchParticipants();
   }, []);
+
+  const fetchParticipants = async () => {
+    try {
+      const response = await fetch("/api/participants");
+      if (!response.ok) {
+        throw new Error("Failed to fetch participants");
+      }
+      const data = await response.json();
+      setParticipants(data.participants);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (error)
     return <p className="text-center mt-10 text-2xl">Error: {error}</p>;
