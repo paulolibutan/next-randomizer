@@ -19,15 +19,26 @@ const Home: React.FC = () => {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [winner, setWinner] = useState<string | null>(null);
   const [winners, setWinners] = useState<Participant[]>([]);
-  const [currentWinner, setCurrentWinner] = useState<Participant | null>(null);
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const drawInterval = useRef<number | null>(null);
+  const currentWinnerRef = useRef<any | null>(null);
 
-  const startDrawing = () => {
+  const pickWinner = () => {
+    startDrawing(); // Start the drawing
+    console.log("Starting the drawing...");
+
+    // Stop the drawing automatically after 10 seconds
+    setTimeout(() => {
+      console.log("Stopping the drawing after 10 seconds...");
+      stopDrawing();
+    }, 10000); // 10,000ms = 10 seconds
+  };
+
+  const startDrawing = async () => {
     if (participants.length === 0) {
       toast.warn("No participants available for the draw.", {
         position: "top-right",
@@ -48,67 +59,76 @@ const Home: React.FC = () => {
       drawInterval.current = window.setInterval(() => {
         const randomIndex = Math.floor(Math.random() * participants.length);
         setWinner(participants[randomIndex].name);
-        setCurrentWinner(participants[randomIndex]);
-      }, 100);
+        currentWinnerRef.current = participants[randomIndex];
+      }, 10);
     }
   };
 
   const stopDrawing = async () => {
-    if (!isDrawing || !currentWinner) return;
-    if (isDrawing) {
-      setIsDrawing(false);
-      if (drawInterval.current) {
-        clearInterval(drawInterval.current);
-        drawInterval.current = null;
+    const finalWinner = currentWinnerRef.current;
+
+    console.log("Attempting to stop the drawing...");
+
+    if (process.env.NEXT_PUBLIC_RAFFLE_MODE !== "Automatic") {
+      if (!isDrawing || !finalWinner) {
+        console.log("Either not drawing or no current winner.");
+        return;
+      }
+    }
+    setIsDrawing(false);
+
+    if (drawInterval.current) {
+      clearInterval(drawInterval.current);
+      drawInterval.current = null;
+      console.log("Interval cleared.");
+    }
+
+    try {
+      const response = await fetch("/api/winners", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ winner: finalWinner }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to save winner");
       }
 
-      try {
-        const response = await fetch("/api/winners", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ winner: currentWinner }),
-        });
+      // Update state
+      setParticipants((prevParticipants) =>
+        prevParticipants.filter(
+          (participant) => participant._id !== finalWinner._id
+        )
+      );
 
-        if (!response.ok) {
-          throw new Error("Failed to save winner");
-        }
+      setWinners((prevWinners) => [...prevWinners, finalWinner]);
+      toast.success(`🎉 Winner: ${finalWinner.name} has been saved!`, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
 
-        // Update state
-        setParticipants((prevParticipants) =>
-          prevParticipants.filter(
-            (participant) => participant._id !== currentWinner._id
-          )
-        );
-
-        setWinners((prevWinners) => [...prevWinners, currentWinner]);
-        toast.success(`🎉 Winner: ${currentWinner.name} has been saved!`, {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
-
-        // Clear the current winner
-        setCurrentWinner(null);
-      } catch (error: any) {
-        console.error("Error saving winner:", error);
-        toast.error("An error occurred while saving the winner.", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
-      }
+      // Clear the current winner
+      currentWinnerRef.current = null; // Clear the reference
+    } catch (error: any) {
+      console.error("Error saving winner:", error);
+      toast.error("An error occurred while saving the winner.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     }
   };
 
@@ -197,6 +217,7 @@ const Home: React.FC = () => {
                 isDrawing={isDrawing}
                 startDrawing={startDrawing}
                 stopDrawing={stopDrawing}
+                pickWinner={pickWinner}
               />
               <div className="flex flex-col items-center justify-center mt-10">
                 <h3 className="text-3xl font-bold">List of Winners</h3>

@@ -2,6 +2,8 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 
+const databaseName = process.env.DATABASE_NAME;
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -16,7 +18,7 @@ export async function POST(req: Request) {
 
     // Connect to MongoDB
     const client = await clientPromise;
-    const db = client.db("raffle"); // Replace 'raffle' with your database name
+    const db = client.db(databaseName); // Replace 'raffle' with your database name
     const collection = db.collection("participants");
 
     // Format participants for insertion
@@ -56,7 +58,7 @@ export async function POST(req: Request) {
 export async function GET() {
   try {
     const client = await clientPromise;
-    const db = client.db("raffle");
+    const db = client.db(databaseName);
     const collection = db.collection("participants");
 
     const participants = await collection.find().toArray();
@@ -74,7 +76,7 @@ export async function GET() {
 export async function DELETE() {
   try {
     const client = await clientPromise;
-    const db = client.db("raffle");
+    const db = client.db(databaseName);
     const collection = db.collection("participants");
 
     const result = await collection.deleteMany({}); // Deletes all participants

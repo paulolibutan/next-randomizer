@@ -6,6 +6,7 @@ interface WinnerDisplayProps {
   isDrawing: boolean;
   startDrawing: () => void;
   stopDrawing: () => void;
+  pickWinner: () => void;
 }
 
 const WinnerDisplay: React.FC<WinnerDisplayProps> = ({
@@ -13,6 +14,7 @@ const WinnerDisplay: React.FC<WinnerDisplayProps> = ({
   isDrawing,
   startDrawing,
   stopDrawing,
+  pickWinner,
 }) => {
   return (
     <div className="flex flex-col items-center justify-center gap-5">
@@ -22,18 +24,31 @@ const WinnerDisplay: React.FC<WinnerDisplayProps> = ({
       </div>
       <div className="flex flex-col sm:flex-row gap-5 mt-5 w-full sm:w-auto">
         <Button
-          className="w-full bg-orange-400 min-w-40"
+          className={`w-full bg-orange-500 min-w-40 ${
+            process.env.NEXT_PUBLIC_RAFFLE_MODE === "Automatic" && "hidden"
+          }`}
           onClick={startDrawing}
           disabled={isDrawing}
         >
           Start Draw
         </Button>
         <Button
-          className="w-full bg-blue-950 min-w-40"
+          className={`w-full bg-blue-950 min-w-40 ${
+            process.env.NEXT_PUBLIC_RAFFLE_MODE === "Automatic" && "hidden"
+          }`}
           onClick={stopDrawing}
           disabled={!isDrawing}
         >
           Stop Draw
+        </Button>
+        <Button
+          className={`w-full bg-orange-500 min-w-40 ${
+            process.env.NEXT_PUBLIC_RAFFLE_MODE === "Manual" && "hidden"
+          }`}
+          onClick={pickWinner}
+          disabled={isDrawing}
+        >
+          Start Draw
         </Button>
       </div>
     </div>

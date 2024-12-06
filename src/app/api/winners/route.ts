@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
 
+const databaseName = process.env.DATABASE_NAME;
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -15,7 +17,7 @@ export async function POST(req: Request) {
     }
 
     const client = await clientPromise;
-    const db = client.db("raffle");
+    const db = client.db(databaseName);
     const participantsCollection = db.collection("participants");
     const winnersCollection = db.collection("winners");
 
@@ -63,7 +65,7 @@ export async function POST(req: Request) {
 export async function GET() {
   try {
     const client = await clientPromise;
-    const db = client.db("raffle");
+    const db = client.db(databaseName);
     const winners = await db.collection("winners").find().toArray();
 
     return NextResponse.json({ winners });
@@ -79,7 +81,7 @@ export async function GET() {
 export async function DELETE() {
   try {
     const client = await clientPromise;
-    const db = client.db("raffle");
+    const db = client.db(databaseName);
     const winnersCollection = db.collection("winners");
 
     // Delete all documents in the winners collection

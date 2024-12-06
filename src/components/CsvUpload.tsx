@@ -28,8 +28,6 @@ const CsvUpload: React.FC<CsvUploadProps> = ({ onUploadComplete }) => {
               name: row.name.trim(),
             }));
 
-            console.log(result);
-
             try {
               const response = await fetch("/api/participants", {
                 method: "POST",
