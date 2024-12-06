@@ -196,6 +196,8 @@ const Home: React.FC = () => {
     fetchData();
   }, []);
 
+  console.log(process.env.NEXT_PUBLIC_RAFFLE_MODE);
+
   if (error)
     return <p className="text-center mt-5 sm:mt-20 text-2xl">Error: {error}</p>;
 
