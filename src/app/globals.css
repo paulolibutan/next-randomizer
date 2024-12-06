@@ -70,3 +70,52 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes rolling {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+.rolling-container {
+  position: relative;
+  overflow: hidden;
+  height: 2em; /* Adjust based on your font size */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 0.5em;
+}
+
+.rolling-text {
+  position: absolute;
+  animation: rolling 0.5s linear infinite;
+  white-space: nowrap;
+  font-size: 1.5em;
+  color: #495057;
+}
+
+@keyframes zoomInOut {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+}
+
+.zoom-winner {
+  animation: zoomInOut 3s ease-in-out infinite;
+  font-size: 2em;
+  font-weight: bold;
+  color: #2d3436;
+  text-align: center;
+}

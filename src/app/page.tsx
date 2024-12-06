@@ -20,6 +20,10 @@ const Home: React.FC = () => {
   const [winner, setWinner] = useState<string | null>(null);
   const [winners, setWinners] = useState<Participant[]>([]);
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  // For confetti animation
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -70,7 +74,7 @@ const Home: React.FC = () => {
     const finalWinner = currentWinnerRef.current;
 
     console.log("Attempting to stop the drawing...");
-    
+
     if (process.env.NEXT_PUBLIC_RAFFLE_MODE !== "Automatic") {
       if (!isDrawing || !finalWinner) {
         console.log("Either not drawing or no current winner.");
@@ -118,6 +122,17 @@ const Home: React.FC = () => {
 
       // Clear the current winner
       currentWinnerRef.current = null; // Clear the reference
+
+      // Start animation and stop after 10 seconds
+      setIsAnimating(true);
+      setTimeout(() => {
+        setIsAnimating(false);
+      }, 10000);
+
+      setShowConfetti(true);
+      setTimeout(() => {
+        setShowConfetti(false); // Stop confetti after 5 seconds
+      }, 10000);
     } catch (error: any) {
       console.error("Error saving winner:", error);
       toast.error("An error occurred while saving the winner.", {
@@ -222,10 +237,12 @@ const Home: React.FC = () => {
                 startDrawing={startDrawing}
                 stopDrawing={stopDrawing}
                 pickWinner={pickWinner}
+                isAnimating={isAnimating}
+                showConfetti={showConfetti}
               />
               <div className="flex flex-col items-center justify-center mt-10">
                 <h3 className="text-3xl font-bold">List of Winners</h3>
-                <ul className="mt-3 text-2xl list-decimal">
+                <ul className="mt-3 text-2xl list-decimal text-start  ">
                   {winners.length > 0 ? (
                     winners.map((winner) => (
                       <li key={winner._id}>
