@@ -33,7 +33,7 @@ const WinnerDisplay: React.FC<WinnerDisplayProps> = ({
           isAnimating && "zoom-winner"
         }`}
       >
-        {winner ? <p>{winner}</p> : <p>No winner yet.</p>}
+        {winner ? <p>{winner.toUpperCase()}</p> : <p>No winner yet.</p>}
       </div>
       <div className="flex flex-col sm:flex-row gap-5 mt-5 w-full sm:w-auto">
         <Button

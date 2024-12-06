@@ -188,6 +188,14 @@ const Home: React.FC = () => {
     }
   };
 
+  const titleCase = (str: any) => {
+    str = str.toLowerCase().split(" ");
+    for (var i = 0; i < str.length; i++) {
+      str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+    }
+    return str.join(" ");
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -212,8 +220,6 @@ const Home: React.FC = () => {
 
     fetchData();
   }, []);
-
-  console.log(process.env.NEXT_PUBLIC_RAFFLE_MODE);
 
   if (error)
     return <p className="text-center mt-5 sm:mt-20 text-2xl">Error: {error}</p>;
@@ -246,7 +252,7 @@ const Home: React.FC = () => {
                   {winners.length > 0 ? (
                     winners.map((winner) => (
                       <li key={winner._id}>
-                        {winner.emp_id} - {winner.name}
+                        {winner.emp_id} - {titleCase(winner.name)}
                       </li>
                     ))
                   ) : (
