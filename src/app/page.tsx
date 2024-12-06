@@ -65,10 +65,12 @@ const Home: React.FC = () => {
   };
 
   const stopDrawing = async () => {
+    if (participants.length === 0) return;
+
     const finalWinner = currentWinnerRef.current;
 
     console.log("Attempting to stop the drawing...");
-
+    
     if (process.env.NEXT_PUBLIC_RAFFLE_MODE !== "Automatic") {
       if (!isDrawing || !finalWinner) {
         console.log("Either not drawing or no current winner.");
